@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gantt Chart Generator</title>
+</head>
+<body>
+    <div>
+        <div>
+            <label for="startday">Start day : </label>
+            <input id="startday" type="date">
+        </div>
+        <div>
+            <label for="endday">End day : </label>
+            <input id="endday" type="date">
+        </div>
+        <button type="button" onclick="generateTable()">Generate</button>
+    </div>
+
+    <table id="table" border="1"></table>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
