@@ -7,6 +7,7 @@
 </head>
 <body>
     <div>
+        <h3>Create Table</h3>
         <div>
             <label for="startday">Start day : </label>
             <input id="startday" type="date">
@@ -15,9 +16,37 @@
             <label for="endday">End day : </label>
             <input id="endday" type="date">
         </div>
-        <button type="button" onclick="generateTable()">Generate</button>
+        <div>
+            <p>Exclude :</p>
+            <div>
+                <input type="checkbox" name="weekend" id="weekend">
+                <label for="weekend">Weekend</label>
+            </div>
+            <div>
+                <input type="checkbox" name="weekday" id="weekday">
+                <label for="weekday">Weekday</label>
+            </div>
+        </div>
+        <button type="button" id="generateTable">Generate</button>
+    </div>
+    <div>
+        <h3>Activity</h3>
+        <div>
+            <label for="activity_name">Name : </label>
+            <input type="text" name="activity_name" id="activity_name">
+        </div>
+        <div>
+            <label for="activity_startdate">Start Date : </label>
+            <input type="date" name="activity_startdate" id="activity_startdate">
+        </div>
+        <div>
+            <label for="activity_duration">Duration : </label>
+            <input type="number" name="activity_duration" id="activity_duration" min="0">
+        </div>
+        <button type="button" id="addActivity">Add</button>
     </div>
 
+    <h3>Table</h3>
     <table id="table" border="1"></table>
 
     <script src="script.js" defer></script>

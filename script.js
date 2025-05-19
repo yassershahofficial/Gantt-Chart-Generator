@@ -1,15 +1,28 @@
+let dates = [];
+const table = document.getElementById("table");
+
 function allDateRange(startdate, enddate){
-    const dates = [];
+    const excludeWeekday = document.getElementById("weekday").checked;
+    const excludeWeekend = document.getElementById("weekend").checked;
+
+    const result = [];
     let current = new Date(startdate);
     const end = new Date(enddate);
 
     while(current <= end){
-        dates.push(new Date(current));
+        const currentday = current.getDay();
+        const excludeLogic = (excludeWeekday && currentday >= 1 && currentday <= 5) || (excludeWeekend && (currentday < 1 || currentday > 5));
+
+        if(excludeLogic){
+            //exclude weekend or weekday or both depending on checkbox
+        }
+        else{
+            result.push(new Date(current));
+        }  
         current.setDate(current.getDate() + 1);
-        console.log(current)
     }
     
-    return dates;
+    return result;
 }
 
 function formatDate(date){
@@ -21,11 +34,10 @@ function formatDate(date){
     return `${day}  ${month}`
 }
 
-function generateTable(){
+document.getElementById("generateTable").addEventListener('click', () => {
     const startday = document.getElementById("startday");
     const endday = document.getElementById("endday");
-    const table = document.getElementById("table");
-    const activities = ["Buy Stuff", "Research", "Build", "Report", "Presentation"];
+    
 
     if(!startday.value || !endday.value){
         alert("Please fill in both inputs")
@@ -39,12 +51,8 @@ function generateTable(){
         alert("Please make sure end date is after start date");
         return
     }
-    // console.log("Start Date : ", startdate);
-    // console.log("End Date", enddate);
 
-    const dates = allDateRange(startdate, enddate);
-
-    // console.log(dates);
+    dates = allDateRange(startdate, enddate);
 
     table.textContent = '';
     const headerRows = document.createElement("tr");
@@ -61,18 +69,23 @@ function generateTable(){
     })
 
     table.appendChild(headerRows);
+})
 
-    activities.forEach(activity => {
-        const rows = document.createElement("tr");
-        const act = document.createElement("td");
-        
-        act.textContent = activity;
-        rows.appendChild(act);
+document.getElementById("addActivity").addEventListener('click', () =>{
+    const name = document.getElementById("activity_name");
+    const startday = document.getElementById("activity_startdate");
+    const duration = document.getElementById("activity_duration");
 
-        dates.forEach(() => {
-            const cells = document.createElement("td");
-            rows.append(cells);
-        })
-        table.appendChild(rows);
+    const newrow = document.createElement("tr");
+    const activity = document.createElement("td");
+
+    activity.textContent = name.value;
+    newrow.appendChild(activity);
+
+    dates.forEach(() => {
+        const emptycells = document.createElement("td");
+        newrow.appendChild(emptycells);
     })
-}
+
+    table.appendChild(newrow);
+})
