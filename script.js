@@ -25,6 +25,30 @@ function allDateRange(startdate, enddate){
     return result;
 }
 
+function allActRange(startdate, duration){
+    const excludeWeekday = document.getElementById("weekday").checked;
+    const excludeWeekend = document.getElementById("weekend").checked;
+
+    const result = [];
+    let current = new Date(startdate);
+    let durationleft = Number(duration);
+    
+    while(durationleft > 0){
+        const currentday = current.getDay();
+        const excludeLogic = (excludeWeekday && currentday >= 1 && currentday <= 5) || (excludeWeekend && (currentday < 1 || currentday > 5));
+        if(excludeLogic){
+            //exclude weekend or weekday or both depending on checkbox
+        }
+        else{
+            result.push(new Date(current))
+            durationleft--;
+        }
+        current.setDate(current.getDate() + 1);
+    }
+
+    return result;
+}
+
 function formatDate(date){
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct","Nov","Dec"];
 
@@ -72,18 +96,38 @@ document.getElementById("generateTable").addEventListener('click', () => {
 })
 
 document.getElementById("addActivity").addEventListener('click', () =>{
-    const name = document.getElementById("activity_name");
-    const startday = document.getElementById("activity_startdate");
-    const duration = document.getElementById("activity_duration");
-
+    const name = document.getElementById("activity_name").value;
+    const startday = document.getElementById("activity_startdate").value;
+    const duration = Number(document.getElementById("activity_duration").value);
     const newrow = document.createElement("tr");
     const activity = document.createElement("td");
 
-    activity.textContent = name.value;
+    if(!name || !startday || !duration){
+        alert("Please fill all required questions");
+        return
+    }
+
+    const startact = new Date(startday);
+    let endact = new Date(startday);
+    endact.setDate(endact.getDate() + duration - 1);
+
+    const datesact = allActRange(startact, duration);
+    
+    if(datesact[datesact.length-1].getDate() > dates[dates.length-1].getDate()){
+        alert("The duration of the date exceed the global date");
+        return;
+    }
+
+    activity.textContent = name;
     newrow.appendChild(activity);
 
-    dates.forEach(() => {
+    dates.forEach(date => {
         const emptycells = document.createElement("td");
+        datesact.forEach(dateact => {
+            if(date.toDateString() == dateact.toDateString()){
+                emptycells.classList.add("filled-cell");
+            }
+        })
         newrow.appendChild(emptycells);
     })
 
